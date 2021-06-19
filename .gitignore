@@ -1,0 +1,16 @@
+/shelf/
+/httpRequests/
+
+.idea
+.idea/*.xml
+.idea/*.html
+.idea/artifacts
+
+/.gradle/
+/build/
+/test/
+target
+out
+projects
+
+*.iml

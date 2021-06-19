@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+}
+
+group 'org.jetbrains.research'
+version '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    extraLibs
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation group: 'args4j', name: 'args4j', version: '2.33'
+    implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    extraLibs group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
+    configurations.compile.extendsFrom(configurations.extraLibs)
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    jar.archiveName(project.name + ".jar")
+
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Main-Class': 'collector.CollectorKt')
+    }
+
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
